@@ -1,10 +1,14 @@
+import { useState } from 'react';
 import './App.css';
 import Carousel from './components/Carousel';
 
 function App() {
+
+  const [c1, setC1] = useState(1)
+
   return (
     <div className="App">
-      <Carousel/>
+      <Carousel val={ c1 } setVal={ setC1 }/>
     </div>
   );
 }
