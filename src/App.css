@@ -3,7 +3,7 @@
   box-sizing: border-box;
 }
 :root {
-  font-size: calc(20px + 2vmin);
+  font-size: calc(10px + 2vmin);
 }
 
 body {
