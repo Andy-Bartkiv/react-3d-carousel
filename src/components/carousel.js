@@ -1,28 +1,21 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import CarCells from './CarCells';
 import cls from './Carousel.module.css'
 
 const Carousel = ({ dig, setDig, isHorizontal, cellCount }) => {
     
-    const [val, setVal] = useState(dig);
-
+    const cellSize = 136;
     const rotateFn = isHorizontal ? 'rotateY' : 'rotateX';
 
-    const carRef = useRef();
+    const [val, setVal] = useState(dig);
 
-    const calcRadius = () => {
-        // const cellWidth = carRef.current.offsetWidth;
-        // const cellHeight = carRef.current.offsetHeight;
-        const cellWidth = 206;
-        const cellHeight = 136;
-        const cellSize = isHorizontal ? cellWidth : cellHeight;
-        console.log(cellHeight, cellWidth)
-        return Math.round( ( cellSize / 2) / Math.tan( Math.PI / cellCount ) );
-    }
-    const [radius, setRadius] = useState(calcRadius());
-
+    const [radius, setRadius] = useState( () =>
+        Math.round(( cellSize / 2) / Math.tan( Math.PI / cellCount )));
+    
+    // creating cells array
     const initCells = () => [...Array(cellCount).keys()];
     const [cells, setCells] = useState(initCells());
-
+    // Stlyling each individual cell
     const initCellsStyle = () => 
         cells.map(cell => { 
             return { 
@@ -32,46 +25,19 @@ const Carousel = ({ dig, setDig, isHorizontal, cellCount }) => {
         )
     const [cellsStyle, setCellsStyle] = useState(initCellsStyle());
 
-    const [carTrans, setCarTrans] = useState(`translateZ(${-radius}px) ${rotateFn}(${val/cellCount*-360}deg)`);
+    // Styling cells carousel
+    const roatateCar = (val) => `translateZ(${-radius}px) ${rotateFn}(${val/cellCount*-360}deg)`;
 
-    // console.log(cells);
     console.log(cellsStyle);
-    // console.log(carTrans)
-
-    function rotateCarousel(val) {
-        const angle = (val) / cellCount * -360;
-        setCarTrans(`translateZ(${-radius}px) ${rotateFn}(${angle}deg)`)
-    }
 
     function handleClick(fwd = true) {
         const newVal = (fwd) ? val+1 : val-1;
+        const index = (newVal >= 0)
+            ? newVal % cellCount
+            : (cellCount + newVal % cellCount ) % cellCount 
         setVal(newVal);
-        setDig(cells[newVal % cellCount])
-        rotateCarousel(newVal);
+        setDig(cells[index]);
     }
-
-    function changeCarousel() {
-        let theta = 360 / cellCount;
-        const cellWidth = carRef.offsetWidth;
-        const cellHeight = carRef.offsetHeight;
-        let  cellSize = isHorizontal ? cellWidth : cellHeight;
-        let radius = Math.round( ( cellSize / 2) / Math.tan( Math.PI / cellCount ) );
-        // for ( var i=0; i < cells.length; i++ ) {
-        //   var cell = cells[i];
-        //   if ( i < cellCount ) {
-        //     // visible cell
-        //     cell.style.opacity = 1;
-        //     var cellAngle = theta * i;
-        //     cell.style.transform = rotateFn + '(' + cellAngle + 'deg) translateZ(' + radius + 'px)';
-        //   } else {
-        //     // hidden cell
-        //     cell.style.opacity = 0;
-        //     cell.style.transform = 'none';
-        //   }
-        // }
-      
-        rotateCarousel();
-      }
 
     return (
         <div className={ cls.container }>
@@ -81,17 +47,17 @@ const Carousel = ({ dig, setDig, isHorizontal, cellCount }) => {
                     onClick={ () => handleClick(false) }
                 >Prev
                 </button>
-                <button>H / W</button>
+                {/* <button>H / W</button> */}
                 <button 
                     style={{ fontSize: '1rem', padding:'.25rem' }}
                     onClick={ () => handleClick(true) }
                 >Next
                 </button>
             </div>
-            <div className={ cls.scene }>
-                <div ref={ carRef } 
+            <div className={ cls.scene }>            
+                <div 
                     className={ cls.carousel }
-                    style={{ transform: carTrans }}
+                    style={{ transform: roatateCar(val) }}
                 >
                     { cells.map((cell, i) =>
                         <div key={ cell } 

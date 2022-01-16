@@ -11,7 +11,8 @@
 
 .scene {
     border: 2px solid orange;
-    width: 210px;
+    /* width: 210px; */
+    width: 140px;
     height: 140px;
     margin: 160px auto;
     position: relative;
@@ -28,7 +29,8 @@
   
 .carousel__cell {
     position: absolute;
-    width: 190px;
+    /* width: 190px; */
+    width: 120px;
     height: 120px;
     left: 10px;
     top: 10px;
@@ -39,4 +41,10 @@
     color: white;
     text-align: center;
     transition: transform .5s, opacity .5s;
+}
+
+.btn_block {
+    margin-bottom: 2rem; 
+    display: flex; 
+    justify-content: space-between;
 }
