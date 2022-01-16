@@ -1,24 +1,77 @@
-import { useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import cls from './Carousel.module.css'
 
-const Carousel = ({ val, setVal }) => {
+const Carousel = ({ dig, setDig, isHorizontal, cellCount }) => {
+    
+    const [val, setVal] = useState(dig);
+
+    const rotateFn = isHorizontal ? 'rotateY' : 'rotateX';
 
     const carRef = useRef();
-    // const carousel = document.querySelector('.carousel');
-    const cellCount = 9;
 
-    function rotateCarousel() {
-        const angle = (val - 1) / cellCount * -360;
-        if (carRef.current)
-            carRef.current.style.transform = 'translateZ(-288px) rotateY(' + angle + 'deg)';
-        console.log(angle);
+    const calcRadius = () => {
+        // const cellWidth = carRef.current.offsetWidth;
+        // const cellHeight = carRef.current.offsetHeight;
+        const cellWidth = 206;
+        const cellHeight = 136;
+        const cellSize = isHorizontal ? cellWidth : cellHeight;
+        console.log(cellHeight, cellWidth)
+        return Math.round( ( cellSize / 2) / Math.tan( Math.PI / cellCount ) );
+    }
+    const [radius, setRadius] = useState(calcRadius());
+
+    const initCells = () => [...Array(cellCount).keys()];
+    const [cells, setCells] = useState(initCells());
+
+    const initCellsStyle = () => 
+        cells.map(cell => { 
+            return { 
+                background: `hsla(${cell*360/cellCount}, 100%, 50%, 0.8)`,
+                transform: `${rotateFn}(${cell*360/cellCount}deg) translateZ(${radius}px)`
+            }}
+        )
+    const [cellsStyle, setCellsStyle] = useState(initCellsStyle());
+
+    const [carTrans, setCarTrans] = useState(`translateZ(${-radius}px) ${rotateFn}(${val/cellCount*-360}deg)`);
+
+    // console.log(cells);
+    console.log(cellsStyle);
+    // console.log(carTrans)
+
+    function rotateCarousel(val) {
+        const angle = (val) / cellCount * -360;
+        setCarTrans(`translateZ(${-radius}px) ${rotateFn}(${angle}deg)`)
     }
 
     function handleClick(fwd = true) {
-        setVal((fwd) ? ++val : --val);
-        console.log(fwd, val, carRef.current);
-        rotateCarousel();
+        const newVal = (fwd) ? val+1 : val-1;
+        setVal(newVal);
+        setDig(cells[newVal % cellCount])
+        rotateCarousel(newVal);
     }
+
+    function changeCarousel() {
+        let theta = 360 / cellCount;
+        const cellWidth = carRef.offsetWidth;
+        const cellHeight = carRef.offsetHeight;
+        let  cellSize = isHorizontal ? cellWidth : cellHeight;
+        let radius = Math.round( ( cellSize / 2) / Math.tan( Math.PI / cellCount ) );
+        // for ( var i=0; i < cells.length; i++ ) {
+        //   var cell = cells[i];
+        //   if ( i < cellCount ) {
+        //     // visible cell
+        //     cell.style.opacity = 1;
+        //     var cellAngle = theta * i;
+        //     cell.style.transform = rotateFn + '(' + cellAngle + 'deg) translateZ(' + radius + 'px)';
+        //   } else {
+        //     // hidden cell
+        //     cell.style.opacity = 0;
+        //     cell.style.transform = 'none';
+        //   }
+        // }
+      
+        rotateCarousel();
+      }
 
     return (
         <div className={ cls.container }>
@@ -36,20 +89,32 @@ const Carousel = ({ val, setVal }) => {
                 </button>
             </div>
             <div className={ cls.scene }>
-                <div ref={ carRef } className={ cls.carousel }>
-                    <div className={ cls.carousel__cell }>1</div>
-                    <div className={ cls.carousel__cell }>2</div>
-                    <div className={ cls.carousel__cell }>3</div>
-                    <div className={ cls.carousel__cell }>4</div>
-                    <div className={ cls.carousel__cell }>5</div>
-                    <div className={ cls.carousel__cell }>6</div>
-                    <div className={ cls.carousel__cell }>7</div>
-                    <div className={ cls.carousel__cell }>8</div>
-                    <div className={ cls.carousel__cell }>9</div>
+                <div ref={ carRef } 
+                    className={ cls.carousel }
+                    style={{ transform: carTrans }}
+                >
+                    { cells.map((cell, i) =>
+                        <div key={ cell } 
+                            className={ cls.carousel__cell }
+                            style = {{ 
+                                background: cellsStyle[i].background,
+                                transform: cellsStyle[i].transform,
+                                // opacity: (i === dig) ? '1' : '0'
+                                // opacity: `${1-Math.abs(i-dig)/5}` 
+                            }}
+                        >
+                            { cell }
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
     )
+}
+
+Carousel.defaultProps = {
+    isHorizontal: false,
+    cellCount: 10,
 }
 
 export default Carousel;
