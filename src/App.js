@@ -4,13 +4,14 @@ import Carousel from './components/Carousel';
 
 function App() {
 
-  const [car1, setCar1] = useState(5);
-  const cellCnt = 10;
+  const [car1, setCar1] = useState(1);
+  const [car2, setCar2] = useState(1);
 
   return (
     <div className="App">
-      <Carousel dig={ car1 } setDig={ setCar1 } cellCount={ cellCnt }/>
-      <div>{ car1 }</div>
+      <Carousel dig={ car1 } setDig={ setCar1 } cellCount={ 10 } size={ 50 } isHorizontal={ true }/>
+      <Carousel dig={ car2 } setDig={ setCar2 } cellCount={ 10 } size={ 30 }/>
+      <div>{ car1 } { car2 }</div>
     </div>
   );
 }
