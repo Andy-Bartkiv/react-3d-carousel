@@ -10,7 +10,7 @@ function App() {
   return (
     <div className="App">
       <Carousel dig={ car1 } setDig={ setCar1 } cellCount={ 10 } size={ 50 } isHorizontal={ true }/>
-      <Carousel dig={ car2 } setDig={ setCar2 } cellCount={ 10 } size={ 30 }/>
+      <Carousel dig={ car2 } setDig={ setCar2 } cellCount={ 10 } size={ 60 }/>
       <div>{ car1 } { car2 }</div>
     </div>
   );

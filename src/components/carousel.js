@@ -42,9 +42,10 @@ const Carousel = ({ dig, setDig, isHorizontal, cellCount, size }) => {
             btn: cls.btn }
         : { container: `${cls.container} ${cls.horizontal}`,
             scene: `${cls.scene} ${cls.horizontal}`,
-            btn: `${cls.btn} ${cls.horizontal}` })
+            btn: `${cls.btn} ${cls.horizontal}` }
+        );
 
-            
+
     const visibleCells = [(dig===0) ? cellCount-1 : dig-1, dig, (dig===cellCount-1) ? 0 : dig+1];
     // console.log(visibleCells)
 
@@ -68,12 +69,12 @@ const Carousel = ({ dig, setDig, isHorizontal, cellCount, size }) => {
                         <div key={ cell } 
                             className={ cls.carousel__cell }
                             style = {{ 
-                                background: cellsStyle[i].background,
+                                // background: cellsStyle[i].background,
                                 transform: cellsStyle[i].transform,
-                                opacity: (i === dig) ? '1' : '.65',
+                                visibility: (visibleCells.includes(i)) ? 'visible' : 'hidden',
+                                // opacity: (i === dig) ? '1' : '.65',
                                 // boxShadow: (i === dig) ? 'inset 0 0 .25em orange' : 'none',
                                 // textShadow: (i === dig) ? '0 0 .25em orange' : 'none',
-                                visibility: (visibleCells.includes(i)) ? 'visible' : 'hidden',
                                 // display: (visibleCells.includes(i)) ? "flex" : 'none'
                             }}
                         >
