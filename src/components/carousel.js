@@ -22,7 +22,8 @@ const Carousel = ({ dig, setDig, isHorizontal, cellCount, size }) => {
         })
     ));
     // Styling cells carousel
-    const roatateCar = (val) => `translateZ(${-radius}px) ${rotateFn}(${(val/cellCount*-360)}deg)`;
+    const roatateCar = (val) => 
+        `translateZ(${-radius}px) ${rotateFn}(${(val/cellCount*-360)}deg)`;
 
     function handleClick(fwd = true) {
         const newVal = (fwd) ? val+1 : val-1;
@@ -46,7 +47,7 @@ const Carousel = ({ dig, setDig, isHorizontal, cellCount, size }) => {
     const renderButton = (fwd) => {
         return (
             <div className={ styles.btn }
-                onClick={ () => handleClick(fwd) }
+                onTouchStart={ () => handleClick(fwd) }
                 onTouchEnd={ (e) => e.preventDefault() }
                 onClick={ () => handleClick(fwd) }
              >
