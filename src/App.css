@@ -9,12 +9,7 @@
 body {
 	font-family: Arial, Helvetica, sans-serif;
   --bg1-color: #282c34;
-  --bg2-color: #282c44;
-  --prm-color: #ffa500;
-  /* --sec-color: #61dafb; */
-  --sec-color: teal;
   --wht-color: whitesmoke;
-  --delay-tr: .25s;
 }
 
 .App {

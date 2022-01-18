@@ -1,10 +1,4 @@
 .container {
-    --bg1-color: #282c34;
-    --bg2-color: #282c44;
-    --prm-color: #ffa500;
-    /* --sec-color: #61dafb; */
-    --sec-color: #008080;
-    --wht-color: whitesmoke;
     user-select: none;
     -moz-user-select: none;
     --size-var: 70px;
