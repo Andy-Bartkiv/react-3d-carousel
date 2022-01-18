@@ -20,7 +20,7 @@ body {
 .App {
   font-size: 1rem;
   display: flex;
-  /* flex-direction: column; */
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 3em;
@@ -28,4 +28,9 @@ body {
   width: 100vw;
   background-color: var(--bg1-color);
   color: var(--wht-color);
+}
+
+.car-block {
+  display: flex;
+  gap: 1em;
 }

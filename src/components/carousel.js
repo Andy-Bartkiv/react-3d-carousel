@@ -1,9 +1,9 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import cls from './Carousel.module.css';
 import { BsCaretDownFill, BsCaretUpFill, BsCaretRightFill, BsCaretLeftFill } from "react-icons/bs";
 
 const Carousel = ({ dig, setDig, isHorizontal, cellCount, size }) => {
-    
+   
     const cellSize = size * .99 * 2;
     const sizeStyle = { "--size-var": `${size}px` };
     const rotateFn = isHorizontal ? 'rotateY' : 'rotateX';
@@ -22,9 +22,7 @@ const Carousel = ({ dig, setDig, isHorizontal, cellCount, size }) => {
         })
     ));
     // Styling cells carousel
-    const roatateCar = (val) => `translateZ(${-radius}px) ${rotateFn}(${val/cellCount*-360}deg)`;
-
-    console.log(cellsStyle);
+    const roatateCar = (val) => `translateZ(${-radius}px) ${rotateFn}(${(val/cellCount*-360)}deg)`;
 
     function handleClick(fwd = true) {
         const newVal = (fwd) ? val+1 : val-1;
@@ -45,51 +43,50 @@ const Carousel = ({ dig, setDig, isHorizontal, cellCount, size }) => {
             btn: `${cls.btn} ${cls.horizontal}` }
         );
 
+    const renderButton = (fwd) => {
+        return (
+            <div className={ styles.btn }
+                onClick={ () => handleClick(fwd) }
+                onTouchEnd={ (e) => e.preventDefault() }
+                onClick={ () => handleClick(fwd) }
+             >
+                { (fwd)
+                    ? (!isHorizontal) ? <BsCaretDownFill/> : <BsCaretLeftFill/> 
+                    : (!isHorizontal) ? <BsCaretUpFill/> : <BsCaretRightFill/>
+                }
+            </div>
+        )
+    }
 
     const visibleCells = [(dig===0) ? cellCount-1 : dig-1, dig, (dig===cellCount-1) ? 0 : dig+1];
     // console.log(visibleCells)
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
     return (
-        <div className={ styles.container }
-            style={ sizeStyle }
-        >
-            <button 
-                className={ styles.btn }
-                onClick={ () => handleClick(false) }
-            >
-                { (!isHorizontal) ? <BsCaretUpFill/> : <BsCaretLeftFill/> }
-            </button>
+        <div className={ styles.container } style={ sizeStyle }>
+
+            { renderButton(false) }
 
             <div className={ styles.scene }>        
-                <div 
-                    className={ cls.carousel }
+                <div className={ cls.carousel }
                     style={{ transform: roatateCar(val) }}
                 >
-                    { cells.map((cell, i) =>
+                    { cells.map((cell) =>
                         <div key={ cell } 
                             className={ cls.carousel__cell }
                             style = {{ 
                                 // background: cellsStyle[i].background,
-                                transform: cellsStyle[i].transform,
-                                visibility: (visibleCells.includes(i)) ? 'visible' : 'hidden',
-                                // opacity: (i === dig) ? '1' : '.65',
-                                // boxShadow: (i === dig) ? 'inset 0 0 .25em orange' : 'none',
-                                // textShadow: (i === dig) ? '0 0 .25em orange' : 'none',
-                                // display: (visibleCells.includes(i)) ? "flex" : 'none'
+                                transform: cellsStyle[cell].transform,
+                                visibility: (visibleCells.includes(cell)) ? 'visible' : 'hidden',
                             }}
                         >
-                            { cell }
+                            <span>{ cell }</span>
                         </div>
                     )}
                 </div>
             </div>
 
-            <button 
-                    className={ styles.btn }
-                    onClick={ () => handleClick(true) }
-            >
-                { (!isHorizontal) ? <BsCaretDownFill/> : <BsCaretRightFill/> }
-            </button>
+            { renderButton(true) }
 
         </div>
     )
@@ -98,7 +95,7 @@ const Carousel = ({ dig, setDig, isHorizontal, cellCount, size }) => {
 Carousel.defaultProps = {
     isHorizontal: false,
     cellCount: 10,
-    size: 70, 
+    size: 50, 
 }
 
 export default Carousel;
