@@ -24,7 +24,11 @@ function App() {
   return (
     <div className="App" ref={ divRef }>
 
-      <div>{ Object.values(cars).map((carVal, i) => <span key={i}>{ carVal }</span>) }</div>
+      <div>
+        { Object.values(cars).map((carVal, i) =>
+           <span key={i}>{ carVal }</span>
+        )}
+      </div>
 
       { (divRef.current) &&
         <div className='car-block'>
